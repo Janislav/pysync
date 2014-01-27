@@ -1,35 +1,28 @@
 import os
-import time
 import filecmp
-from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 import shutil
-from stat import *
 
 class Dispatch:
     ''' This class represents a synchronization object '''
-    
     def __init__(self, name=''):
         self.name = name
         self.node_list = []
         self.file_copied_count = 0
         self.folder_copied_count = 0
- 
+
     def add_node(self, node):
         self.node_list.append(node)
- 
+
     def compare_nodes(self):
         ''' This method takes the nodes in the node_list and compares them '''
         nodeListLength = len(self.node_list)
-        # For each node in the list
         for node in self.node_list:
-            # If the list has another item after it, compare them
             if self.node_list.index(node) < len(self.node_list) - 1: 
                 node2 = self.node_list[self.node_list.index(node) + 1]
                 print '\nComparing Node ' + str(self.node_list.index(node)) + ' and Node ' + str(self.node_list.index(node) + 1) + ':'
-                # Passes the two root directories of the nodes to the recursive _compare_directories.
                 self._compare_directories(node.root_path, node2.root_path)
-    
+
     def _compare_directories(self, left, right):
         ''' This method compares directories. If there is a common directory, the
             algorithm must compare what is inside of the directory by calling this
@@ -55,7 +48,7 @@ class Dispatch:
                     right_newer.append(d)
         self._copy(left_newer, left, right)
         self._copy(right_newer, right, left)
- 
+
     def _copy(self, file_list, src, dest):
         ''' This method copies a list of files from a source node to a destination node '''
         for f in file_list:
@@ -96,20 +89,3 @@ def sync(source_path, target_path):
     my_dispatch.compare_nodes()
     print 'Total files copied ' + str(my_dispatch.file_copied_count)
     print 'Total folders copied ' + str(my_dispatch.folder_copied_count)
-
-if __name__ == "__main__":
-
-    source_path = "folder1"
-    target_path = "folder2"
-
-    event_handler = MyHandler(source_path=source_path, target_path=target_path)
-    observer = Observer()
-    observer.schedule(event_handler, path=source_path, recursive=True)
-    observer.start()
-
-    try:
-        while True:
-            time.sleep(1)
-    except KeyboardInterrupt:
-        observer.stop()
-    observer.join()

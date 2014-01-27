@@ -1,3 +1,6 @@
 src/foo.bar/build
 src/foo.bar/dist
 src/foo.bar/foo.bar.egg-info
+src/py.sync/build/
+src/py.sync/dist/
+src/py.sync/py.sync.egg-info/
