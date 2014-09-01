@@ -11,6 +11,7 @@ def main():
     parser.add_argument("-s", "--source",help="The source directory", default=None)
     parser.add_argument("-t", "--target",help="The target directory", default=None)
     parser.add_argument("--local",  help="Mirror local directorys", action="store_true")
+    parser.add_argument("--hello",  help="Says Hello ;)", action="store_true")
 
     args = parser.parse_args()
 
